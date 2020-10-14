@@ -33,3 +33,17 @@
     
     Encore une fois nous affichons chaque matrice représentant la position du minautore dans le labyrinthe.
     
+## **Troisième partie*
+    Cette partie est consacrée à l'interface graphique en utilisant le mode tkinter.
+    L'objectif étant de mettre en forme le labyrinthe pour que l'utilisateur puisse visualiser le jeu en temps réel. 
+        -Une fonction scanne le labyrinthe lignes par lignes et affecte une couleur à chaque valeur de la cellule  :
+            -si la valeur est 99 : vert 
+            -si la valeur est -1 : noir 
+            -si la valeur est  0 : jaune
+        -La fonction sleep() extraite du module time nous permet de "mettre un temps de latence " que l'on a définit .
+        -Pour finir nous avons imaginer afficher une fenêtre présentant le parcours du minotaure :
+            -On utilise le module Tkinter avec les fonction title , canvas et geometry , 3 méthodes issues du module permettant respectivement de 
+                -> afficher un titre 
+                -> afficher une fenêtre aux dimensions définies 
+                -> défini un espace de dessin 
+    
