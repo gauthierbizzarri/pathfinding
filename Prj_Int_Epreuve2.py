@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct 12 13:21:11 2020
+Created on Tue Oct 13 14:19:09 2020
 
 @author: brice
 """
 
 import time
 import tkinter as tk
+
+#//////////////////////////////// Fenetre /////////////////////////////////////
 
 fenetre = tk.Tk()   #défini une fenetre graphique
 fenetre.title("Jeu du Minotaure")   #défini le titre de la fenetre
@@ -17,7 +19,7 @@ graph.pack()
 
 class Cellule:  #défini un objet Cellule
     def __init__(self,x,y): #défini la méthode initialisation
-        self.coordonnee = [x*20,y*20]   #défini l'attribut coordonnée
+        self.coordonnee = [x*14,y*14]   #défini l'attribut coordonnée
         self.couleur = ["green"]    #défini l'attribut couleur
             
     def affichage(self):    #défini la méthode affichage
@@ -25,51 +27,104 @@ class Cellule:  #défini un objet Cellule
         #défini l'affichage de l'objet
 
 labyrinthe = [[]] #défini une matrice labyrinthe vide
-minotaure = '00'
+minotaure = '1'
 
+#//////////////////////////////////////////////////////////////////////////////
 
 import csv
 
-with open('laby_exemple.csv', newline='') as csvfile:   #ouvre le fichier
+with open('../Laby_Eval.csv', newline='') as csvfile:   #ouvre le fichier
     spamreader = csv.reader(csvfile)    #récupère une ligne du fichier
     for row in spamreader:              #pour chaque ligne du fichier
         labyrinthe.append(row)          #ajoute la ligne à la matrice labyrinthe
 csvfile.close()                         #ferme le fichier
 
+#/////////////////////////////// Fonctions ////////////////////////////////////
+
 def affichage(matrice,n,m): #permet d'afficher le labyrinthe
+    #case2 = Cellule(1+5,3+5)
     for i in range(2,n+2):  #pour chaque ligne de la matrice
         for j in range(m):      #pour chaque case d'une ligne de la matrice
             case = Cellule(j+5,i+5) #défini une case aux coordonnée j,i
             if matrice[i][j]=='99': #si la case de la matrice est libre alors:
                 case.couleur[0] = "green"   #la case prend la couleur verte
+                case.affichage()   #dessine la case
             else:                   #sinon
                 if matrice[i][j]=='-1':     #si la case est un mur alors:
                     case.couleur[0] = "black"   #la case prend la couler noir
-                else:                       #sinon
-                    case.couleur[0] = "yellow" #la case prednd la couleur jaune
-            case.affichage()    #dessine la case
+                    case.affichage()   #dessine la case
+                else:                      #sinon
+                    if matrice[i][j]=='0':
+                        case.couleur[0]="red"
+                        case.affichage()
+                    else:
+                        #case2.couleur[0] = "green"
+                        #case2.affichage()
+                        case.couleur[0] = "yellow" #la case prednd la couleur jaune
+                        case.affichage()
+                        #case2 = case
+            
 affichage(labyrinthe,15,11) #affiche le labyrinthe de 15 lignes et 11 colonnes
 
+def lepluscourt(matrice,chaine,x,y,a,sense,cpt):
+    orientation=['D','H','G','B']
+    if matrice[x][y] != '-1':
+        if int(matrice[x][y]) < cpt:
+            cpt = int(matrice[x][y])
+            matrice[x][y]='0'
+            x,y=direction(x,y,sense)
+    else:
+        a = a +1
+        if a==4:
+            a=0
+        sense = orientation[a]
+    return x,y,a,cpt,sense
+
+def rec(matrice,a,liste,cpt):
+    orientation = ['D','H','G','B']
+    liste3 = []
+    affichage(matrice,19,14)
+    if liste == []:
+        return 'none'
+    else:
+        for i in range(len(liste)):
+            for j in range(4):
+                a = a+1
+                if a==4:
+                    a= 0
+                sense = orientation[a]
+                liste2 = [0,0]
+                liste2[0],liste2[1] = direction(liste[i][0],liste[i][1],sense)
+                if matrice[liste2[0]][liste2[1]]=='99':
+                    matrice[liste2[0]][liste2[1]]= str(cpt)
+                    print(liste)
+                    liste3.append(liste2)
+        return rec(matrice,a,liste3,cpt+1)
+    
+    
 def test(labyrinthe,chaine,x,y): #permet de tester dans quelle direction le minotaure peut se déplacer
-    if labyrinthe[x][y-1] == '99':  #si la case de gauche est libre alors:
+    orientation = ['D','B','G','H']
+    a = 0
+    orientation[a]
+    if labyrinthe[x][y-1] != '-1':  #si la case de gauche est libre alors:
         labyrinthe[x][y-1] = "0G"       #alors j'avance sur cette case
         y = y - 1                       #je déplace mon curseur sur la gauche
         chaine = chaine + "G"           #je récupère la direction
         return chaine,x,y               #retourne les coordonnées et la direction prise
     else:                           #sinon:
-        if labyrinthe[x-1][y] == '99':  #si la case de devant est libre alors:
+        if labyrinthe[x-1][y] != '-1':  #si la case de devant est libre alors:
             labyrinthe[x-1][y] = "0H"       #alors j'avance sur cette case
             x = x - 1                       #je déplace mon curseur devant
             chaine = chaine + "H"           #je récupère la direction
             return chaine,x,y               #retourne les coordonnées et la direction prise
         else:                           #sinon:
-            if labyrinthe[x][y+1] == '99':  #si la case de droite est libre alors:
+            if labyrinthe[x][y+1] != '-1':  #si la case de droite est libre alors:
                 labyrinthe[x][y+1] = "0D"       #alors j'avance sur cette case
                 y = y + 1                       #je déplace mon curseur sur la droite
                 chaine = chaine + "D"           #je récupère la direction
                 return chaine,x,y               #retourne les coordonnées et la direction prise
             else:                           #sinon:
-                if labyrinthe[x+1][y] == '99':  #si la case arrière est libre alors:
+                if labyrinthe[x+1][y] != '-1':  #si la case arrière est libre alors:
                     labyrinthe[x+1][y] = "0B"       #alors j'avance sur cette case
                     x = x + 1                       #je déplace mon curseur en arrière
                     chaine = chaine + "B"           #je récupère la direction
@@ -92,14 +147,17 @@ def conv_dir(chaine): #permet de convertir la chaine sous le format: se déplace
 
 def direction(x,y,sense):  #permet de récupérer les coordonnées du déplacement à effectuer 
     if sense == 'D':    #si il est tourné vers la droite alors:
-        y = y + 1           #avance d'une colonne
+        y = y + 1          #avance d'une colonne
+        return x,y
     if sense == 'B':    #si il est tourné vers le bas alors:
         x = x + 1           #avance d'une ligne
+        return x,y 
     if sense == 'G':    #si il est tourné vers la gauche alors:
         y = y - 1           #recule d'une colonne
+        return x,y 
     if sense == 'H':    #si il est tourné vers le haut alors:
         x = x - 1           #recule d'une ligne
-    return x,y          #retourne les coordonnées x et y
+    return x,y         #retourne les coordonnées x et y
 
 def rotation(i,a):  #permet d'effectuer une rotation
     if i == 'D':    #si le caractere est D alors:
@@ -126,25 +184,33 @@ def lecture(matrice, chaine,x,y):   #permet de lire la chaine de direction
             a = rotation(i,a)       #effectue une rotation
             sense = orientation[a]  #récupère la nouvelle direction
             
-                       
-n = 15  #nombre de lignes
-m = 11  #nombre de colonnes
+#/////////////////////////// Initialisation ///////////////////////////////////                      
+n = 19  #nombre de lignes
+m = 14  #nombre de colonnes
 x = 3   #coordonnée x (3 correspond à 1 du labyrinthe)
 y = 1   #coordonnée y
-labyrinthe[x][y] = minotaure #place le minotaure sur la case de départ
+cpt = 1
 affichage(labyrinthe,n,m)   #afiiche le labyrinthe
 chaine = ""                 #définit une chaine vide
+a = 0   #on suppose qu'au début il est tourné vers la droite
+liste = [[n,m-2]]
 
-while((x!=(n)) or (y!=(m-2))): #tant que le minotaure n'atteint pas la sortie faire:
-    chaine,x,y = test(labyrinthe,chaine,x,y)    #récupère les coordonnées et la direction résultante du test
-    time.sleep(0.5)   #attend 1 seconde
+#/////////////////////// Programme Principal //////////////////////////////////
+
+#while((x!=(n)) or (y!=(m-2))): #tant que le minotaure n'atteint pas la sortie faire:
+rec(labyrinthe,a,liste,cpt)    #récupère les coordonnées et la direction résultante du test
+print(labyrinthe)
+sense = 'D'
+while((x!=(n)) or (y!=(m-1))):
+    x,y,a,cpt,sense = lepluscourt(labyrinthe,chaine,x,y,a,sense,100)
+    time.sleep(0.2)   #attend 1 seconde
     affichage(labyrinthe,n,m)   #affiche le labyrinthe
     fenetre.update()            #met à jour la fenetre
 
 print(conv_dir(chaine))     #affiche la chaine des directions convertit pour la lecture du minotaure
 labyrinthe2 = [[]] #défini une matrice labyrinthe2 vide
 
-with open('laby_exemple.csv', newline='') as csvfile:   #ouvre le fichier
+with open('../Laby_Eval.csv', newline='') as csvfile:   #ouvre le fichier
     spamreader = csv.reader(csvfile)    #récupère une ligne du fichier
     for row in spamreader:              #pour chaque ligne du fichier
         labyrinthe2.append(row)         #ajoute la ligne à la matrice labyrinthe2
@@ -158,4 +224,3 @@ affichage(labyrinthe2,n,m)      #affiche le labyrinthe
 
 lecture(labyrinthe2,conv_dir(chaine),x,y)   
 affichage(labyrinthe2,15,11)            #affiche le labyrinthe fini
-fenetre.mainloop()                      #lance la fenetre
