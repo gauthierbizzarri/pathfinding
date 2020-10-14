@@ -47,7 +47,7 @@
                 -> afficher une fenêtre aux dimensions définies 
                 -> défini un espace de dessin 
     
-##*Quatrième partie*
+## *Quatrième partie*
     Cette partie est dédiée à la recherche du plus court chemin .
     On s'initialise à la sortie du labyrinthe et on parcour progressivement les chemns libres en affectant à chaque case un compteur croissant qui s'arrêtera lors que le chemin s'arrête et donc quand le minautore touchera un mur . 
     Les chemins libres seront parcourus et seront continués jusqu'à ce que l'entrée soit atteinte . Le plus court chemin sera donc la suite de chiffres partant de l'arrivée dont le premier élément est le plus petit parmis les chemins possibles . 
