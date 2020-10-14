@@ -33,7 +33,7 @@
     
     Encore une fois nous affichons chaque matrice représentant la position du minautore dans le labyrinthe.
     
-## **Troisième partie*
+## *Troisième partie*
     Cette partie est consacrée à l'interface graphique en utilisant le mode tkinter.
     L'objectif étant de mettre en forme le labyrinthe pour que l'utilisateur puisse visualiser le jeu en temps réel. 
         -Une fonction scanne le labyrinthe lignes par lignes et affecte une couleur à chaque valeur de la cellule  :
