@@ -12,6 +12,7 @@ on veut ax
 import matplotlib.pyplot as plt
 
 def calcule_A(pxc, pyc):
+    print("")
     a = 0.0
     a = float(pyc)/float(pxc)
 
@@ -23,7 +24,7 @@ def calcule_A(pxc, pyc):
 
     for i in range(1, pxc):
         a = float(i)/float(a)
-        liste_de_point_ord.append(a*i)
+        liste_de_point_ord.append(i)
     
 #    return liste_de_point_ord,liste_de_point_abs
  
