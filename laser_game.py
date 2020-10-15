@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 graph = plt #objet plt
 
 def calcule_A(pxc, pyc):
+    print("")
     a = 0.0
     a = float(pyc)/float(pxc)
 
