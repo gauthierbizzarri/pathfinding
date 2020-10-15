@@ -16,7 +16,7 @@ def Mort(graph,fenetre):
         g=9.81
         xcible = int(input("Distance de la cible en mètres : ") )    #input de la coordonnées x de la cible 
         ycible =0
-           
+      
     v = float(input("vitesse initiale ? : ") )                  #input la vitesse initiale 
     t=0                                                         # On initialise le temps à 0 
     cpt=0                                                      #on initialise un compteur à 0 
@@ -36,7 +36,9 @@ def Mort(graph,fenetre):
         tfinal=2
     pas = truncate(tfinal/50,10)    #pas de temps on aura 50 points ici
     xfinal=int(delta(v,TétaR))      #calcul du point d'impact
+
     #TETASOL=0.5*(math.asin((2*xcible*g)/(v**2)))
+
     #################################### JEU DU MORTIER #########################################
     if g==9.81:
             
@@ -59,6 +61,7 @@ def Mort(graph,fenetre):
             
             
             ############# PARTIE GRAPHIQUE 
+
             plt.title('Le lancé')
             plt.figure()                                                   #C'est le titre
             plt.plot(XA,Y ,linestyle = 'dashed')# trajectoire en pointillés
@@ -227,3 +230,4 @@ def testlaser(xcible,XA,Y,ycible):      #teste si le laser touche la cible à X+
 class Mortier:      
     def __init__(self,graph,fenetre):
         Mort(graph,fenetre)
+
