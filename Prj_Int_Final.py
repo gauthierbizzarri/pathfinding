@@ -8,56 +8,56 @@ Created on Wed Oct 14 16:35:31 2020
 
 import time
 import tkinter as tk
+import random as randint
 
-#//////////////////////////////// Fenetre /////////////////////////////////////
+#//////////////////////////////////////////////////////////////////////////////
+#//////////////////////////////// FENETRE /////////////////////////////////////
+#//////////////////////////////////////////////////////////////////////////////
 
-fenetre = tk.Tk()   #défini une fenetre graphique
-fenetre.title("Jeu du Minotaure")   #défini le titre de la fenetre
-fenetre.geometry("700x700+100+100") #défini les dimension de la fenetre
+fenetre = tk.Tk()                                           #défini une fenetre graphique
+fenetre.title("Jeu du Minotaure")                           #défini le titre de la fenetre
+fenetre.geometry("700x700+100+100")                         #défini les dimension de la fenetre
 graph = tk.Canvas(fenetre,width=500,height=500,bg='grey')   #défini un espace de dessin
 graph.pack()    
 
-class Labyrinthe:
-    def __init__(self,n,m,matrice):
-        self.couleur = ["black"]
-        self.taille = [n,m]
+class Labyrinthe:   #permet de définir un objet labyrinthe existant
+    def __init__(self,n,m,matrice): #initialise un labyrinthe non découvert
+        self.couleur = ["black"]             #initialise la couleur en noir
+        self.taille = [n,m]                  #initialise la taille
         for i in range(2,self.taille[0]+2):  #pour chaque ligne de la matrice
             for j in range(self.taille[1]):      #pour chaque case d'une ligne de la matrice
-                case = Cellule(j+1,i+1) #défini une case aux coordonnée j,i
-                case.couleur[0] = self.couleur[0]
-                case.affichage()
+                case = Cellule(j+1,i+1)             #défini une case aux coordonnée j,i
+                case.couleur[0] = self.couleur[0]   #définit la couleur de la case
+                case.affichage()                    #dessine la case
         
     def affichage(self,matrice,n,m):
-        #case2 = Cellule(1+5,3+5)
-        for i in range(2,n+2):  #pour chaque ligne de la matrice
-            for j in range(m):      #pour chaque case d'une ligne de la matrice
-                case = Cellule(j+1,i+1) #défini une case aux coordonnée j,i
-                if matrice[i][j]=='99': #si la case de la matrice est libre alors:
+        for i in range(2,n+2):      #pour chaque ligne de la matrice
+            for j in range(m):          #pour chaque case d'une ligne de la matrice
+                case = Cellule(j+1,i+1)     #défini une case aux coordonnée j,i
+                if matrice[i][j]=='99':     #si la case de la matrice est libre alors:
                     case.couleur[0] = "green"   #la case prend la couleur verte
-                    case.affichage()   #dessine la case
-                else:                   #sinon
+                    case.affichage()            #dessine la case
+                else:                       #sinon
                     if matrice[i][j]=='-1':     #si la case est un mur alors:
                         case.couleur[0] = "black"   #la case prend la couler noir
-                        case.affichage()   #dessine la case
-                    else:                      #sinon
+                        case.affichage()            #dessine la case
+                    else:                       #sinon
                         if matrice[i][j]=='100':    #si la case contient la valeur 100 alors:
                             case.couleur[0]="red"       #la case prend la couleur rouge
                             case.affichage()            #dessine la case
                         else:                       #sinon
-                            #case2.couleur[0] = "green"
-                            #case2.affichage()
-                            case.couleur[0] = "yellow" #la case prednd la couleur jaune
+                            case.couleur[0] = "yellow"  #la case prend la couleur jaune
                             case.affichage()            #dessine las case
-                            #case2 = case
+
         
 class Cellule:  #défini un objet Cellule
-    def __init__(self,x,y): #défini la méthode initialisation
-        self.coordonnee = [x*20,y*20]   #défini l'attribut coordonnée
-        self.couleur = ["green"]    #défini l'attribut couleur
+    def __init__(self,x,y):             #défini la méthode initialisation
+        self.coordonnee = [x*20,y*20]       #défini l'attribut coordonnée
+        self.couleur = ["green"]            #défini l'attribut couleur
             
     def affichage(self):    #défini la méthode affichage
         graph.create_rectangle(self.coordonnee[0],self.coordonnee[1],self.coordonnee[0]+2,self.coordonnee[1]+2,outline=self.couleur[0],width=18)
-        #défini l'affichage de l'objet
+                                #défini l'affichage de l'objet
 
 labyrinthe = [[]] #défini une matrice labyrinthe vide
 minotaure = '1'
@@ -66,20 +66,20 @@ minotaure = '1'
 import csv
 
 with open('../Laby_Eval.csv', newline='') as csvfile:   #ouvre le fichier
-    spamreader = csv.reader(csvfile)    #récupère une ligne du fichier
-    for row in spamreader:              #pour chaque ligne du fichier
-        labyrinthe.append(row)          #ajoute la ligne à la matrice labyrinthe
-csvfile.close()                         #ferme le fichier
+    spamreader = csv.reader(csvfile)                        #récupère une ligne du fichier
+    for row in spamreader:                                  #pour chaque ligne du fichier
+        labyrinthe.append(row)                                  #ajoute la ligne à la matrice labyrinthe
+csvfile.close()                                         #ferme le fichier
 
 matrice = Labyrinthe(19,14,labyrinthe) #initialise l'objet Labyrinthe
-fenetre.update()                        #rafraichi la fenetre
-time.sleep(1.0)                         #attend 1 secondes
+fenetre.update()                       #rafraichi la fenetre
+time.sleep(1.0)                        #attend 1 secondes
 
 #//////////////////////////////////////////////////////////////////////////////
-#/////////////////////////////// Fonctions ////////////////////////////////////
+#/////////////////////////////// FONCTIONS ////////////////////////////////////
 #//////////////////////////////////////////////////////////////////////////////
 
-#////////////////////////// Entrée Utilisateur ////////////////////////////////
+#////////////////////////// ENTREE UTILISATEUR ////////////////////////////////
 
 
 def keyH(event): #détecte l'appuie sur la touche haut
@@ -102,6 +102,7 @@ def keyG(event): #détecte l'appuie sur la touche gauche
 def Entrer(x,y,matrice,Haut,Bas,Gauche,Droite): #test la case en fonction des touches directionnelles
     c,d = x,y           #conserve les coordonnées du minotaure
     if Haut == True:    #si j'appuie sur Haut alors:
+
         x = x - 1           #je regarde la case du haut
         if matrice[x][y] != '-1':#si la case est libre alors:
             indication["text"] = "" #je n'affiche rien
@@ -145,6 +146,7 @@ fenetre.bind("<Left>",keyG)     #établit le lien entre la touche directionnelle
 fenetre.bind("<Right>",keyD)    #établit le lien entre la touche directionnelle droite et la fonction keyD
 
 #//////////////////////////////////////////////////////////////////////////////
+
 def affichage(matrice,n,m): #permet d'afficher le labyrinthe
     #case2 = Cellule(1+5,3+5)
     for i in range(2,n+2):  #pour chaque ligne de la matrice
@@ -167,7 +169,17 @@ def affichage(matrice,n,m): #permet d'afficher le labyrinthe
                         case.couleur[0] = "yellow" #la case prednd la couleur jaune
                         case.affichage()            #dessine las case
                         #case2 = case
-
+                        
+def creation(matrice,n,m,x,y):      #permet de générer un labyrinthe aléatoire
+    orientation = ['D','H','G','B']     #liste de toutes les directions
+    matrice[x][y] = '99'                #la case prend la valeur '99'
+    sense = orientation[randint.randint(0,3)]   #récupère une direction aléatoire
+    x,y = direction(x,y,sense,n,m)      #récupère les nouvelles coordonnées
+    if (x == n) and (y == m-2):         #si j'atteint la case de sortie alors:
+        matrice[x][y] = '99'                #la case prend la valeur '99'
+        return matrice                      #retourne le matrice
+    else:                               #sinon:
+        return creation(matrice,n,m,x,y)    #retourne elle-même
 """
 def murGauche(matrice,chaine,x,y,a,sense,cpt): #permet d'effectuer le chmein le plus court
     orientation=['D','H','G','B']   #liste contenant toutes les directions
@@ -193,7 +205,7 @@ def murGauche(matrice,chaine,x,y,a,sense,cpt): #permet d'effectuer le chmein le 
         x,y=c,d
     return x,y,a,cpt,sense
 """
-def lepluscourt(matrice,a,liste,cpt):   #modifie la matrice pour avoir le chmein le plus court
+def lepluscourt(matrice,a,liste,cpt,n,m):   #modifie la matrice pour avoir le chmein le plus court
     orientation = ['D','H','G','B']     #liste contenant toutes les directions
     liste3 = []                         #liste vide
     affichage(matrice,19,14)            #affiche le labyrinthe
@@ -209,11 +221,11 @@ def lepluscourt(matrice,a,liste,cpt):   #modifie la matrice pour avoir le chmein
                     a= 0                                #il revient à 0
                 sense = orientation[a]              #je récupère la nouvelle direction
                 liste2 = [0,0]                      #j'initialise une liste à 0
-                liste2[0],liste2[1] = direction(liste[i][0],liste[i][1],sense)#je récupère les coordonnée de la case voisine dans cette liste
+                liste2[0],liste2[1] = direction(liste[i][0],liste[i][1],sense,n,m)#je récupère les coordonnée de la case voisine dans cette liste
                 if matrice[liste2[0]][liste2[1]]=='99': #si la case est libre alors:
                     matrice[liste2[0]][liste2[1]]= str(cpt) #je place la valeur de mon compteur
                     liste3.append(liste2)                   #j'ajoute mes nouveaux coordonnées dans ma liste3
-        return lepluscourt(matrice,a,liste3,cpt+1)  #retourne ma fonction avec ma nouvelle liste et j'incrémente mon compteur de 1
+        return lepluscourt(matrice,a,liste3,cpt+1,n,m)  #retourne ma fonction avec ma nouvelle liste et j'incrémente mon compteur de 1
     
     
 def test(labyrinthe,chaine,x,y,cpt): #permet de tester dans quelle direction le minotaure peut se déplacer
@@ -254,17 +266,17 @@ def conv_dir(chaine): #permet de convertir la chaine sous le format: se déplace
             chaine2 = 'A'                   #la chaine vaut A
     return chaine2                  #retourne la chaine2
 
-def direction(x,y,sense):  #permet de récupérer les coordonnées du déplacement à effectuer 
-    if sense == 'D':    #si il est tourné vers la droite alors:
+def direction(x,y,sense,n,m):  #permet de récupérer les coordonnées du déplacement à effectuer 
+    if (sense == 'D') and (y!=m-2):    #si il est tourné vers la droite alors:
         y = y + 1           #avance d'une colonne
         return x,y          #retourne les coordonnées x et y
-    if sense == 'B':    #si il est tourné vers le bas alors:
+    if (sense == 'B') and (x!=n):    #si il est tourné vers le bas alors:
         x = x + 1           #avance d'une ligne
         return x,y          #retourne les coordonnées x et y
-    if sense == 'G':    #si il est tourné vers la gauche alors:
+    if (sense == 'G') and (y!=1):    #si il est tourné vers la gauche alors:
         y = y - 1           #recule d'une colonne
         return x,y          #retourne les coordonnées x et y
-    if sense == 'H':    #si il est tourné vers le haut alors:
+    if (sense == 'H') and (x!=3):    #si il est tourné vers le haut alors:
         x = x - 1           #recule d'une ligne
     return x,y         #retourne les coordonnées x et y
 
@@ -293,50 +305,89 @@ def lecture(matrice,chaine,sense,x,y):   #permet de lire la chaine de direction
         else:               #sinon
             a = rotation(i,a)       #effectue une rotation
             sense = orientation[a]  #récupère la nouvelle direction
-            
-#/////////////////////////// Initialisation ///////////////////////////////////                      
+
+def Jeu(laby,n,m): #permet de parcourir un labyrinthe
+    x = 3   #coordonnée x (3 correspond à 1 du labyrinthe)
+    y = 1   #coordonnée y
+    global Haut  #définit les variables des touches directionnelles 
+    global Bas
+    global Droite
+    global Gauche
+    while((x!=(n)) or (y!=(m-2))):  #tant je ne suis pas sortie du labyrinthe
+        time.sleep(0.1)     #attend 100 milisecondes
+        x,y,etat = Entrer(x,y,laby,Haut,Bas,Gauche,Droite) #récupère les coordonnées
+        Haut = False        #initilise les touches sur false à chaque tour
+        Bas = False
+        Droite = False
+        Gauche = False
+        laby[x][y] = '100' #mes la valeur 100 dans la nouvelle case
+        case = Cellule(y+1,x+1)     
+        case.couleur[0] = "yellow" #change la couleur de la case
+        case.affichage()            #dessine la case
+        fenetre.update()            #rafraichie la fenetre
+    return laby             #retourne le labyrinthe
+
+
+#//////////////////////////////////////////////////////////////////////////////
+#/////////////////////// PROGRAMME PRINCIPAL //////////////////////////////////
+#//////////////////////////////////////////////////////////////////////////////
+    
+#/////////////////////////// INITIALISATION ///////////////////////////////////                      
 n = 19  #nombre de lignes
-m = 14  #nombre de colonnes
+m = 14  #nombre de colonnes4
 x = 3   #coordonnée x (3 correspond à 1 du labyrinthe)
 y = 1   #coordonnée y
 cpt = 1 #initialise le compteur à 1
-Haut = False
+Haut = False  #initialise les touches directionnelles à false
 Bas = False
 Droite = False
 Gauche = False
-#affichage(labyrinthe,n,m)   #affiche le labyrinthe
+
 chaine = ""                 #définit une chaine vide
 a = 0   #on suppose qu'au début il est tourné vers la droite
 liste = [[n,m-2]]
-indication = tk.Label(fenetre, text = '',font='arial 26')
-indication.place(x = 400, y = 200)
-#/////////////////////// Programme Principal //////////////////////////////////
+indication = tk.Label(fenetre, text = '',font='arial 26')   #créer un label indiquant si l'on touche un mur
+indication.place(x = 400, y = 200)                          #définit la position du label
 
-while((x!=(n)) or (y!=(m-2))):  #tant je ne suis pas sortie du labyrinthe
-    time.sleep(0.1)     #attend 100 milisecondes
-    x,y,etat = Entrer(x,y,labyrinthe,Haut,Bas,Gauche,Droite) #récupère les coordonnées
-    Haut = False        #initilise les touches sur false à chaque tour
-    Bas = False
-    Droite = False
-    Gauche = False
-    labyrinthe[x][y] = '100' #mes la valeur 100 dans la nouvelle case
-    case = Cellule(y+1,x+1)     
-    case.couleur[0] = "yellow" #change la couleur de la case
-    case.affichage()            #dessine la case
-    fenetre.update()            #rafraichie la fenetre
-    
-lepluscourt(labyrinthe,a,liste,cpt)    #modifie la matrice pour effectuer le chemin le plus court
-sense = 'D'                             #initialise le sens de départ
-cpt = 100                               #initilialise le compteur à 100
-while((x!=(n)) or (y!=(m-3))):          #tant que le minotaure n'as pas atteint la sortie faire:
+#//////////////////////////////////////////////////////////////////////////////
+#//////////////////////////////// PROGRAMME ///////////////////////////////////
+#//////////////////////////////////////////////////////////////////////////////
+
+Jeu(labyrinthe,n,m)         #lance le premier labyrinthe
+affichage(labyrinthe,n,m)   #dessine le labyrinthe terminé
+fenetre.update()            #rafraichie la fenetre
+time.sleep(3)               #attend 3 secondes
+
+x = 3   #coordonnée x (3 correspond à 1 du labyrinthe)
+y = 1   #coordonnée y
+labyrinthe = [['-1' for i in range(m)] for j in range(n+2)] #initialise une matrice
+
+for i in range(2,n+2):                              #pour i de 2 à n+2 faire:
+    for j in range(m):                                  #pour j de 0 à m faire:
+        if (i==2) or (i==n) or (j==0) or (j==m-2):          #si je suis sur un bord de la matrice alors:
+            labyrinthe[i][j] = '-1'                             #la case prend la valeur '-1'
+            
+labyrinthe = creation(labyrinthe,n,m,x,y)   #crée un labyrinthe aléatoire
+matrice2 = Labyrinthe(n,m,labyrinthe)       #initialise l'objet Labyrinthe
+fenetre.update()                            #rafraichie la fenetre
+Jeu(labyrinthe,n,m)                         #lance le second labyrinthe
+affichage(labyrinthe,n,m)                   #affiche le labyrinthe terminé
+fenetre.update()                            #rafraichie la fenetre
+time.sleep(3)                               #attend 3 seconde
+lepluscourt(labyrinthe,a,liste,cpt,n,m)     #modifie la matrice pour effectuer le chemin le plus court
+sense = 'D'                                 #initialise le sens de départ
+cpt = 100                                   #initilialise le compteur à 100
+
+while((x!=(n)) or (y!=(m-3))):     #tant que le minotaure n'as pas atteint la sortie faire:
     chaine,x,y,cpt = test(labyrinthe,chaine,x,y,cpt)    #effectue le chemin le plus court et retourne les coordonnée de chaque case
-    time.sleep(0.2)             #attend 200 miliseconde
-    affichage(labyrinthe,n,m)   #affiche le labyrinthe
-    fenetre.update()            #met à jour la fenetre
-print(chaine)
-sense = chaine[0]  
+    time.sleep(0.2)                                     #attend 200 miliseconde
+    affichage(labyrinthe,n,m)                           #affiche le labyrinthe
+    fenetre.update()                                    #met à jour la fenetre
+    
+print(chaine)               #écrit la chaine
+sense = chaine[0]           #récupère la première direction
 print(conv_dir(chaine))     #affiche la chaine des directions convertit pour la lecture du minotaure
-
+"""
 labyrinthe2 = [[]] #défini une matrice labyrinthe2 vide
 
 with open('../Laby_Eval.csv', newline='') as csvfile:   #ouvre le fichier
@@ -348,9 +399,10 @@ csvfile.close()                         #ferme le fichier
 x = 3   #coordonnée x (3 correspond à 1 du labyrinthe)
 y = 1   #coordonnée y
 
-labyrinthe2[x][y] = minotaure #place le minotaure sur la case de départ
+labyrinthe3[x][y] = minotaure #place le minotaure sur la case de départ
 affichage(labyrinthe2,n,m)      #affiche le labyrinthe
 
 lecture(labyrinthe2,conv_dir(chaine),sense,x,y)   #suit les instructions de la chaine pour sortir du labyrinthe
 affichage(labyrinthe2,n,m,)            #affiche le labyrinthe fini
 fenetre.update()            #met à jour la fenetre
+"""
