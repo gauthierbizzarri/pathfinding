@@ -16,7 +16,14 @@ fenetre.title("Jeu du Minotaure")   #défini le titre de la fenetre
 fenetre.geometry("700x700+100+100") #défini les dimension de la fenetre
 graph = tk.Canvas(fenetre,width=500,height=500,bg='grey')   #défini un espace de dessin
 graph.pack()    
+pos=[-1,-1]
 
+def afficher_laser_game():
+    print("laser")
+
+def afficher_mortier():
+    print("mortier")
+    
 class Labyrinthe:
     def __init__(self,n,m,matrice):
         self.couleur = ["black"]
@@ -65,7 +72,7 @@ minotaure = '1'
 
 import csv
 
-with open('../Laby_Eval.csv', newline='') as csvfile:   #ouvre le fichier
+with open('Laby_Eval2.csv', newline='') as csvfile:   #ouvre le fichier
     spamreader = csv.reader(csvfile)    #récupère une ligne du fichier
     for row in spamreader:              #pour chaque ligne du fichier
         labyrinthe.append(row)          #ajoute la ligne à la matrice labyrinthe
@@ -143,6 +150,10 @@ fenetre.bind("<Up>",keyH)       #établit le lien entre la touche directionnelle
 fenetre.bind("<Down>",keyB)     #établit le lien entre la touche directionnelle bas et la fonction keyB
 fenetre.bind("<Left>",keyG)     #établit le lien entre la touche directionnelle gauche et la fonction keyG
 fenetre.bind("<Right>",keyD)    #établit le lien entre la touche directionnelle droite et la fonction keyD
+aficher_laser_gameBTN = tk.Button(fenetre, text = 'Ouvrir laser game', command=afficher_laser_game())
+aficher_laser_gameBTN.place(x = 100, y = 510)
+aficher_mortierBTN = tk.Button(fenetre, text = 'Ouvrir mortier', command=afficher_mortier())
+aficher_mortierBTN.place(x = 100, y = 550)
 
 #//////////////////////////////////////////////////////////////////////////////
 def affichage(matrice,n,m): #permet d'afficher le labyrinthe
@@ -321,7 +332,11 @@ while((x!=(n)) or (y!=(m-2))):  #tant je ne suis pas sortie du labyrinthe
     Gauche = False
     labyrinthe[x][y] = '100' #mes la valeur 100 dans la nouvelle case
     case = Cellule(y+1,x+1)     
-    case.couleur[0] = "yellow" #change la couleur de la case
+    case.couleur[0] = "red" #change la couleur de la case
+    casePrec= Cellule(pos[0], pos[1])
+    casePrec.couleur[0] = "yellow"
+    casePrec.affichage()
+    pos = [y+1,x+1]
     case.affichage()            #dessine la case
     fenetre.update()            #rafraichie la fenetre
     
@@ -339,7 +354,11 @@ print(conv_dir(chaine))     #affiche la chaine des directions convertit pour la 
 
 labyrinthe2 = [[]] #défini une matrice labyrinthe2 vide
 
-with open('../Laby_Eval.csv', newline='') as csvfile:   #ouvre le fichier
+#Affichage labyrinth
+
+
+    
+with open('Laby_Eval2.csv', newline='') as csvfile:   #ouvre le fichier
     spamreader = csv.reader(csvfile)    #récupère une ligne du fichier
     for row in spamreader:              #pour chaque ligne du fichier
         labyrinthe2.append(row)         #ajoute la ligne à la matrice labyrinthe2
@@ -353,4 +372,7 @@ affichage(labyrinthe2,n,m)      #affiche le labyrinthe
 
 lecture(labyrinthe2,conv_dir(chaine),sense,x,y)   #suit les instructions de la chaine pour sortir du labyrinthe
 affichage(labyrinthe2,n,m,)            #affiche le labyrinthe fini
+
+ 
+
 fenetre.update()            #met à jour la fenetre
