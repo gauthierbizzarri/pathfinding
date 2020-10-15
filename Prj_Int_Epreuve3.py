@@ -95,6 +95,7 @@ def lepluscourt(matrice,a,liste,cpt):   #modifie la matrice pour avoir le chmein
     orientation = ['D','H','G','B']     #liste contenant toutes les directions
     liste3 = []                         #liste vide
     affichage(matrice,19,14)            #affiche le labyrinthe
+    time.sleep(0.2)             #attend 200 miliseconde
     fenetre.update()
     if liste == []:                     #si ma liste est vide alors:
         return 'none'                       #retourne rien

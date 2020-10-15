@@ -9,6 +9,7 @@ Created on Wed Oct 14 16:35:31 2020
 import time
 import tkinter as tk
 import random as randint
+import missile
 
 #//////////////////////////////////////////////////////////////////////////////
 #//////////////////////////////// FENETRE /////////////////////////////////////
@@ -19,6 +20,7 @@ fenetre.title("Jeu du Minotaure")                           #défini le titre de
 fenetre.geometry("700x700+100+100")                         #défini les dimension de la fenetre
 graph = tk.Canvas(fenetre,width=500,height=500,bg='grey')   #défini un espace de dessin
 graph.pack()    
+
 pos=[-1,-1]
 
 def afficher_laser_game():
@@ -317,7 +319,7 @@ def lecture(matrice,chaine,sense,x,y):   #permet de lire la chaine de direction
             a = rotation(i,a)       #effectue une rotation
             sense = orientation[a]  #récupère la nouvelle direction
 
-def Jeu(laby,n,m): #permet de parcourir un labyrinthe
+def Jeu(laby,n,m,pos): #permet de parcourir un labyrinthe
     x = 3   #coordonnée x (3 correspond à 1 du labyrinthe)
     y = 1   #coordonnée y
     global Haut  #définit les variables des touches directionnelles 
@@ -333,7 +335,11 @@ def Jeu(laby,n,m): #permet de parcourir un labyrinthe
         Gauche = False
         laby[x][y] = '100' #mes la valeur 100 dans la nouvelle case
         case = Cellule(y+1,x+1)     
-        case.couleur[0] = "yellow" #change la couleur de la case
+        case.couleur[0] = "red" #change la couleur de la case
+        case2 = Cellule(pos[0], pos[1])
+        case2.couleur[0] = "yellow"
+        case2.affichage()
+        pos = [y+1,x+1]
         case.affichage()            #dessine la case
         fenetre.update()            #rafraichie la fenetre
     return laby             #retourne le labyrinthe
@@ -364,11 +370,22 @@ indication.place(x = 400, y = 200)                          #définit la positio
 #//////////////////////////////// PROGRAMME ///////////////////////////////////
 #//////////////////////////////////////////////////////////////////////////////
 
-Jeu(labyrinthe,n,m)         #lance le premier labyrinthe
+Jeu(labyrinthe,n,m,pos)         #lance le premier labyrinthe
 affichage(labyrinthe,n,m)   #dessine le labyrinthe terminé
-fenetre.update()            #rafraichie la fenetre
-time.sleep(3)               #attend 3 secondes
-
+fenetre.update()          #rafraichie la fenetre
+time.sleep(3)
+graph.destroy()             #attend 3 secondes
+graph = tk.Canvas(fenetre,width=500,height=500,bg='grey')   #défini un espace de dessin
+graph.pack()
+missile.Mortier(graph,fenetre) 
+#courbe = tk.PhotoImage(file='unnamed.png')
+#graph.create_image(300, 300, image = courbe)
+#graph.image = courbe
+fenetre.update()
+time.sleep(3) 
+graph.destroy()             #attend 3 secondes
+graph = tk.Canvas(fenetre,width=500,height=500,bg='grey')   #défini un espace de dessin
+graph.pack() 
 x = 3   #coordonnée x (3 correspond à 1 du labyrinthe)
 y = 1   #coordonnée y
 labyrinthe = [['-1' for i in range(m)] for j in range(n+2)] #initialise une matrice
@@ -381,7 +398,7 @@ for i in range(2,n+2):                              #pour i de 2 à n+2 faire:
 labyrinthe = creation(labyrinthe,n,m,x,y)   #crée un labyrinthe aléatoire
 matrice2 = Labyrinthe(n,m,labyrinthe)       #initialise l'objet Labyrinthe
 fenetre.update()                            #rafraichie la fenetre
-Jeu(labyrinthe,n,m)                         #lance le second labyrinthe
+Jeu(labyrinthe,n,m,pos)                         #lance le second labyrinthe
 affichage(labyrinthe,n,m)                   #affiche le labyrinthe terminé
 fenetre.update()                            #rafraichie la fenetre
 time.sleep(3)                               #attend 3 seconde
